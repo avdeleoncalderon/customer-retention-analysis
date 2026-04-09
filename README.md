@@ -144,3 +144,152 @@ jupyter notebook "Customer Retention Analysis.ipynb"
 - 🔗 [LinkedIn](https://www.linkedin.com/in/ari-vladimir/)
 - 🌐 [Portafolio](https://avdeleoncalderon.github.io/)
 - 📧 av.deleoncalderon@gmail.com
+
+---
+
+# Customer Retention Analysis — Model Fitness 🏋️
+
+## Project Objective
+
+Model Fitness, a gym chain, needed to **anticipate membership cancellations** before they happened. Without visibility into which customers were at risk, the marketing team operated reactively and lost customers who could have been retained with early interventions.
+
+**Business question:** What factors predict a customer's cancellation, and how can we segment users to design personalized retention strategies?
+
+---
+
+## Data Source
+
+**Dataset:** Provided by TripleTen as part of the Machine Learning sprint in the Data Analysis bootcamp. The data simulates real gym records; it contains no personally identifiable information.
+
+**Structure:** 2 CSV files (`gym_churn_us.csv`) — current month data for each customer and previous month behavioral data.
+
+**Size:** ~4,000 customer records.
+
+**Variables included:**
+
+| Variable | Description |
+|---|---|
+| `Churn` | Target variable: 1 = canceled, 0 = stayed |
+| `gender` | Customer's gender |
+| `Near_Location` | Lives or works near the gym |
+| `Partner` | Works at a company partnered with the gym |
+| `Promo_friends` | Signed up through a friend referral |
+| `Phone` | Provided phone number |
+| `Age` | Customer's age |
+| `Lifetime` | Months since first signing up |
+| `Contract_period` | Contract length: 1, 3, 6, or 12 months |
+| `Month_to_end_contract` | Months remaining until contract expires |
+| `Group_visits` | Participates in group sessions |
+| `Avg_class_frequency_total` | Average visits/week across entire history |
+| `Avg_class_frequency_current_month` | Average visits/week in current month |
+| `Avg_additional_charges_total` | Total spending on additional services (cafeteria, massages, etc.) |
+
+---
+
+## Process
+
+### 1. Data Cleaning and Preparation
+- Checked for null values and duplicates → the dataset was clean, with no missing records.
+- Validated data types and ranges (e.g., ages between 18 and 65, contract periods only allowed values: 1, 3, 6, 12).
+- No imputation needed; documented assumptions about zeros in visit counts (inactive customers that month, not missing data).
+
+### 2. Exploratory Data Analysis (EDA)
+- Distributions of numerical variables segmented by `Churn = 0` vs `Churn = 1`.
+- Correlation matrices to identify multicollinearity (key finding: `month_to_end_contract` and `contract_period` have 0.90 correlation).
+- Cancellation rates by subgroup (by contract type, proximity, group participation).
+
+### 3. Predictive Modeling
+- **Models trained:** Logistic Regression and Random Forest.
+- **Split:** 80% training / 20% test, stratified by `Churn`.
+- **Metrics evaluated:** Accuracy, Precision, Recall, and AUC-ROC.
+
+| Model | Accuracy | Precision | Recall | AUC |
+|---|---|---|---|---|
+| Logistic Regression | 85% | 0.83 | 0.80 | 0.91 |
+| Random Forest | 84% | 0.82 | 0.81 | 0.92 |
+
+### 4. Segmentation with Clustering (K-Means)
+- Variables were normalized before clustering.
+- The dendrogram suggested **4 optimal clusters**.
+- Each cluster was characterized by usage behavior, contract length, and cancellation rate.
+
+---
+
+## Results and Key Insights
+
+**1. Short contract is the strongest predictor of cancellation.**
+Customers with 1-month contracts cancel at a significantly higher rate than those with 6 or 12-month contracts. Extending contracts from the start reduces risk.
+
+**2. Visit frequency distinguishes those who stay from those who leave.**
+Customers who cancel visit the gym less frequently in the month prior to cancellation. This creates an intervention window: a drop in visits is an actionable warning sign.
+
+**3. Group sessions act as a retention anchor.**
+Customers who participate in group classes have notably lower cancellation rates, possibly due to the social component and commitment to fixed schedules.
+
+**4. Geographic proximity matters.**
+Customers who live or work near the gym cancel less — distance friction is a real churn factor.
+
+---
+
+## Strategic Recommendations
+
+1. **Incentives to extend short contracts:** Offer a 15–20% discount when moving from 1 month to 6 or 12 months, especially at sign-up time.
+2. **Early warning program:** Deploy the predictive model in production — if a customer falls below their historical visit frequency, trigger proactive outreach (message, offer, call).
+3. **Group session campaign:** Design an onboarding campaign that gets every new customer to at least one group class in their first month.
+4. **Proactive segmentation:** When a new customer registers, classify them into the nearest cluster to personalize retention strategy from day one.
+
+**If this were a real job task:** the next step would be to implement the model in the gym's CRM to generate weekly risk scores per customer, and measure campaign impact with an A/B test.
+
+---
+
+## How to Run This Project
+
+### Requirements
+```
+Python 3.9+
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+scipy
+```
+
+Install dependencies:
+```
+pip install pandas numpy matplotlib seaborn scikit-learn scipy
+
+
+# 1. Clone the repository
+git clone https://github.com/avdeleoncalderon/customer-retention-analysis
+
+# 2. Enter the directory
+cd customer-retention-analysis
+
+# 3. Open the notebook
+jupyter notebook "Customer Retention Analysis.ipynb"
+
+```
+
+> The dataset (gym_churn_us.csv) is included in the datasets/ folder. No additional download required.
+
+---
+
+## Tools and Technologies
+
+![Python](https://img.shields.io/badge/python-357ebd?style=for-the-badge&logo=python&logoColor=white)
+![Pandas](https://img.shields.io/badge/pandas-%23357ebd.svg?style=for-the-badge&logo=pandas&logoColor=white)
+![Seaborn](https://img.shields.io/badge/Seaborn-357ebd?style=for-the-badge)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-%23357ebd.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)
+
+**Techniques:** Data Cleaning · EDA · Logistic Regression · Random Forest · K-Means Clustering · Data Visualization
+
+
+---
+
+## About the Author
+
+**Ari Vladimir** — Mechanical Engineer transitioning to Data Analytics.
+- 🔗 [LinkedIn](https://www.linkedin.com/in/ari-vladimir/)
+- 🌐 [Portafolio](https://avdeleoncalderon.github.io/)
+- 📧 av.deleoncalderon@gmail.com
